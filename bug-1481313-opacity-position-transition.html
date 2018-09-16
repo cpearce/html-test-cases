@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+        div {
+          position: absolute;
+          top: 100px;
+          width: 400px;
+          height: 289px;
+          transition-property: opacity top;
+          transition-duration: 5s;
+          opacity: 1.0;
+          background-image: url("res/devuanhosting.png");
+        }
+        div.fade {
+          opacity: 0;
+          top: 500px;
+        }
+    </style>
+  </head>
+  <body>
+    <p>Press space to toggle transition</p>
+    <div id="x" class="fade">Press space to transition</div>
+    <script>
+      window.addEventListener("keypress", (e) => {
+        let x = document.getElementById("x");
+        if (x.classList.contains("fade")) {
+          x.classList.remove("fade");
+        } else {
+          x.classList.add("fade");
+        }
+      }, false);
+    </script>
+  </body>
+</html>
