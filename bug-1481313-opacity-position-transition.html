@@ -2,34 +2,61 @@
 <html lang="en">
   <head>
     <style>
-        div {
+        div#x {
           position: absolute;
           top: 100px;
           width: 400px;
           height: 289px;
-          transition-property: opacity top;
+          transition-property: opacity,top;
           transition-duration: 5s;
           opacity: 1.0;
           background-image: url("res/devuanhosting.png");
         }
-        div.fade {
+        div#x.fade {
           opacity: 0;
           top: 500px;
+        }
+        div#r {
+          position: absolute;
+          left: 500px;
+          top: 100px;
         }
     </style>
   </head>
   <body>
     <p>Press space to toggle transition</p>
-    <div id="x" class="fade">Press space to transition</div>
+    <div id="x" class="fade"></div>
+    <div id="r">log</div>
     <script>
+      let x = document.getElementById("x");
+      let positions = [];
       window.addEventListener("keypress", (e) => {
-        let x = document.getElementById("x");
-        if (x.classList.contains("fade")) {
-          x.classList.remove("fade");
-        } else {
-          x.classList.add("fade");
+        if (e.code == "Space") {
+          if (x.classList.contains("fade")) {
+            x.classList.remove("fade");
+          } else {
+            x.classList.add("fade");
+          }
         }
       }, false);
+      let update_position = (timestamp) => {
+        let position = x.getBoundingClientRect().top;
+        if (position > 100 && position < 400) {
+          positions.push(position);
+        } else if (positions.length > 0) {
+          positions.push(position);
+          let d = document.createElement("div");
+          for (let i = 1; i < positions.length; i++) {
+            let delta = positions[i] - positions[i-1];
+            d.appendChild(document.createTextNode(delta.toFixed(2) + " "));
+          }
+          document.getElementById("r").appendChild(d);
+          document.getElementById("r").appendChild(document.createElement("hr"));
+          positions = [];
+        }
+        window.requestAnimationFrame(update_position);
+      };
+      window.requestAnimationFrame(update_position);
     </script>
   </body>
 </html>
