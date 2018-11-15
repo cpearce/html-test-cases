@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Simulate promise based HTMLMediaElement.canAutoPlay()</title>
+  </head>
+  <body>
+    <script>
+
+      function playWithMutedPlayFallback(video) {
+        return video.canAutoplay().catch((e) => {
+          console.log("canAutoPlay failed with " + e.message)
+          video.muted = true;
+        }).then(() => video.play());
+      }
+
+      let video = document.createElement("video");
+      // Create mock of proposed canAutoplay
+      video.canAutoplay = () => {
+        if (video.readyState < HTMLMediaElement.HAVE_METADATA) {
+          return Promise.reject(new Error("InvalidStateError"));
+        }
+        if (!video.muted) {
+          return Promise.reject(new Error("NotAllowed"));
+        }
+        return Promise.resolve();
+      };
+
+      video.src = "res/arctic_giant.webm";
+      document.body.appendChild(video);
+
+      playWithMutedPlayFallback(video)
+        .then(
+          () => console.log("Should be playing..."),
+          (e) => console.log("cannot play: " + e.message));
+      
+    </script>
+  </body>
+</html>

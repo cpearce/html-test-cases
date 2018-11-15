@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Simulate proposed HTMLMediaElement.allowedToPlay()</title>
+  </head>
+  <body>
+    <script>
+
+      function playWithMutedPlayFallback(video) {
+        if (!video.allowedToPlay()) {
+          console.log("Not allowed to play non-muted");
+          video.muted = true;
+        }
+        return video.play();
+      }
+
+      let video = document.createElement("video");
+      // Create mock of proposed sync allowedToPlay
+      video.allowedToPlay = () => {
+        return video.readyState >= HTMLMediaElement.HAVE_METADATA &&
+               video.muted;
+      };
+
+      video.src = "res/arctic_giant.webm";
+      document.body.appendChild(video);
+
+      playWithMutedPlayFallback(video)
+        .then(
+          () => console.log("Should be playing..."),
+          (e) => console.log("cannot play: " + e.message));
+      
+    </script>
+  </body>
+</html>
