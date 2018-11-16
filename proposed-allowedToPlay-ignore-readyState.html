@@ -6,19 +6,24 @@
     <script>
 
       function playWithMutedPlayFallback(video) {
-        if (!video.allowedToPlay()) {
+        if (!video.allowedToPlay) {
           console.log("Not allowed to play non-muted");
           video.muted = true;
         }
         return video.play();
       }
 
-      let video = document.createElement("video");
       // Create mock of proposed sync allowedToPlay
-      video.allowedToPlay = () => {
-        return video.readyState >= HTMLMediaElement.HAVE_METADATA &&
-               video.muted;
-      };
+      let video = document.createElement("video");
+      if (video.allowedToPlay == undefined) {
+        Object.defineProperty(video, 'allowedToPlay', {
+            get: function() {
+              return this.readyState >= HTMLMediaElement.HAVE_METADATA &&
+                     this.muted;
+
+            }
+          });
+      }
 
       video.src = "res/arctic_giant.webm";
       document.body.appendChild(video);
