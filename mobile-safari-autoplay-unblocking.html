@@ -11,6 +11,8 @@ video { border: solid grey 2px; }
   font-size: 0.8em;
 }
 #container {
+  /* Note: container needs to be considered "clickable" by iOS for the
+      event handler which starts video plauback to fire. */
   cursor: pointer;  
 }
 </style>
@@ -18,7 +20,7 @@ video { border: solid grey 2px; }
 </head>
 <body>
   <div id="container">
-    <p>Video should play some time after you click somewhere in the page.</p>
+    <p>Video should play on iOS Safari shortly after you click/touch somewhere in the page.</p>
     <video id="video" controls src="res/short.mp4">
     </video>
     <div id="log"></div>
