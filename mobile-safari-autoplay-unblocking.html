@@ -10,14 +10,19 @@ video { border: solid grey 2px; }
   height: 500px;
   font-size: 0.8em;
 }
+#container {
+  cursor: pointer;  
+}
 </style>
 
 </head>
 <body>
-  <p>Video should play some time after you click somewhere in the page.</p>
-  <video id="video" controls src="res/short.mp4">
-  </video>
-  <div id="log"></div>
+  <div id="container">
+    <p>Video should play some time after you click somewhere in the page.</p>
+    <video id="video" controls src="res/short.mp4">
+    </video>
+    <div id="log"></div>
+  </div>
 <script>
 
 function log(msg) {
