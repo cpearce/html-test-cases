@@ -15,7 +15,7 @@ video { border: solid grey 2px; }
 </head>
 <body>
   <p>Video should play some time after you click somewhere in the page.</p>
-  <video id="video" controls src="res/arctic_giant.mp4">
+  <video id="video" controls src="res/short.mp4">
   </video>
   <div id="log"></div>
 <script>
@@ -103,10 +103,11 @@ function init() {
   let interval = setInterval(async ()=> {
     let played = await video.play().then(() => true, () => false);
     log("play() in setInterval " + (played ? "succeeded" : "failed"));
-    if (played) {
-      clearTimeout(interval);
-    }
   }, 2000);
+
+  video.addEventListener("playing", (e) => {
+    clearTimeout(interval);
+  });
 
 }
 
