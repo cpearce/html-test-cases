@@ -99,7 +99,7 @@ function init() {
 
   video.volume = 0.1;
 
-  document.body.addEventListener("click", (e) => {
+  document.getElementById("container").addEventListener("click", (e) => {
     log("Loading video in click handler.");
     video.load();
   });
