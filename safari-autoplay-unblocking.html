@@ -10,14 +10,21 @@ video { border: solid grey 2px; }
   height: 500px;
   font-size: 0.8em;
 }
+#container {
+  /* Note: container needs to be considered "clickable" by iOS for the
+     event handler which starts video plauback to fire. */
+  cursor: pointer;
+}
 </style>
 
 </head>
 <body>
-  <p>Video should play some time after you click somewhere in the page.</p>
-  <video id="video" controls src="res/short.mp4">
-  </video>
-  <div id="log"></div>
+  <div id="container">
+    <p>Video should play some time after you click somewhere in the page.</p>
+    <video id="video" controls src="res/short.mp4">
+    </video>
+    <div id="log"></div>
+  </div>
 <script>
 
 function log(msg) {
@@ -94,7 +101,7 @@ function init() {
 
   video.volume = 0.1;
 
-  document.body.addEventListener("click", (e) => {
+  document.getElementById("container").addEventListener("click", (e) => {
     log("Loading audio in click handler.");
     let a = new Audio('data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAEAAAABAAAAABAAgAZGF0YRAAAAB/f39/f39/f39/f39/f39/');
     a.load();
