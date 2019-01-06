@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>Test autoplay blocking</title>
+<style>
+video { border: solid grey 2px; }
+#log {
+  overflow: scroll;
+  border: solid grey 2px;
+  height: 500px;
+  font-size: 0.8em;
+}
+</style>
+
+</head>
+<body>
+  <p>Video should play some time after you click somewhere in the page.</p>
+  <video id="video" controls src="res/arctic_giant.mp4">
+  </video>
+  <div id="log"></div>
+<script>
+
+function log(msg) {
+  if (disable) {
+    return;
+  }
+  var l = document.getElementById("log");
+  var div = document.createElement("div");
+  div.appendChild(document.createTextNode("" + (new Date()).getTime() + ": "));
+  div.appendChild(document.createTextNode(msg));
+  div.appendChild(document.createElement("br"));
+  l.appendChild(div);
+  div.scrollIntoView({block: "end", inline: "nearest"});
+}
+
+var lastEvent = "";
+var count = 0;
+var lastEventSpan = null;
+var disable = false;
+
+function logEvent(name) {
+  if (disable) {
+    return;
+  }
+  var l = document.getElementById("log");
+  if (lastEvent == name) {
+    count++;
+    lastEventSpan.textContent = name + " +" + count;
+  } else {
+    count = 0;  
+    var div = document.createElement("div");
+    var text = document.createTextNode(name);
+    div.appendChild(text);
+    div.appendChild(document.createElement("br"));
+    l.appendChild(div); 
+    lastEventSpan = text;
+  }
+  lastEvent = name;
+}
+
+init();
+
+function init() {
+
+  var video = document.getElementById("video");
+
+  [
+    "abort",
+    "canplay",
+    "canplaythrough",
+    "durationchange",
+    "emptied",
+    "ended",
+    "error",
+    "loadeddata",
+    "loadedmetadata",
+    "loadstart",
+    "pause",
+    "play",
+    "playing",
+    //"progress",
+    "resize",
+    "seeked",
+    "seeking",
+    "stalled",
+    "suspend",
+    "timeupdate",
+    "volumechange",
+    "waiting",
+  ].forEach(
+    function(e) {
+      video.addEventListener(e, function(event) { log(event.type);}, false);
+    });
+
+  video.volume = 0.1;
+
+  document.body.addEventListener("click", (e) => {
+    log("Loading audio in click handler.");
+    let a = new Audio('data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAEAAAABAAAAABAAgAZGF0YRAAAAB/f39/f39/f39/f39/f39/');
+    a.load();
+  });
+
+  let interval = setInterval(async ()=> {
+    let played = await video.play().then(() => true, () => false);
+    log("play() in setInterval " + (played ? "succeeded" : "failed"));
+    if (played) {
+      clearTimeout(interval);
+    }
+  }, 2000);
+
+}
+
+</script>
+</body>
+</html>
